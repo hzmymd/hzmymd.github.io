@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="googleSheets.js"></script>
+  </head>
+  <body>
+      <button id="mybtn">ドラえもん</button>
+      <div id="contents"></div>
+
+        <input hidden id="txt" type="text" value="ドラえもん">
+       
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+
+        $(function() {
+          "use strict";
+          // unsupported.
+          if (!'SpeechSynthesisUtterance' in window) {
+              alert('Speech synthesis(音声合成) APIには未対応です.');
+              return;
+          }
+          // 発話機能をインスタンス化
+          var msg = new SpeechSynthesisUtterance();
+
+          $('#mybtn').on('click',function() {
+            // 発話実行
+            msg.volume = 1.0; // 音量 min 0 ~ max 1
+            msg.rate = 1.0; // 速度 min 0 ~ max 10
+            msg.pitch = 1.2; // 音程 min 0 ~ max 2
+
+            msg.text = $('#txt').val(); // 話す中身
+            msg.lang = 'ja-JP'; // en-US or ja-JP
+
+            speechSynthesis.speak(msg);
+
+            // 終了時の処理
+            msg.onend = function (event) {
+              console.log('喋った時間：' + event.elapsedTime + 's');
+            }
+          });
+
+        });
+
+ 
+    /* global $ loadSheets */
+    $(function(){
+      $("#mybtn").on("click",showdata);
+        
+      let min = 0;
+      let max = 4;
+      
+        let a = Math.floor(Math.random()*(max + 1 - min)) +min;
+      async function showdata () {
+          let min = 0;
+          let max = 4;
+      
+        let a = Math.floor(Math.random()*(max + 1 - min)) +min;
+        let data = await loadSheets('s1316257!B2:D10');
+          //console.log(data.values[2][5]);
+        //$("#contents").append(data.values[0][2]);
+        $("#contents").append("<img width='100px' height='100px' src='"+data.values[a][1]+"'/>");
+      } 
+    });
+
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>
